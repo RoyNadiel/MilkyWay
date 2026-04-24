@@ -1,0 +1,26 @@
+{
+  "name": "via-lactea-theme",
+  "displayName": "Via Lactea Theme",
+  "description": "A beautiful dark theme inspired by the Milky Way",
+  "version": "0.0.1",
+  "publisher": "roy-nadiel",
+  "engines": {
+    "vscode": "^1.80.0"
+  },
+  "categories": [
+    "Themes"
+  ],
+  "contributes": {
+    "themes": [
+      {
+        "label": "Via Lactea",
+        "uiTheme": "vs-dark",
+        "path": "./themes/via-lactea-color-theme.json"
+      }
+    ]
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/RoyNadiel/Via-Lactea-Theme"
+  }
+}
