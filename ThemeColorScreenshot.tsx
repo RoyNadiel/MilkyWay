@@ -1,7 +1,7 @@
 // Theme preview component for screenshots
 // Requires a TypeScript config with `resolveJsonModule: true` and `allowSyntheticDefaultImports: true`
 import React from 'react';
-import theme from './themes/via-lactea-color-theme.json';
+import theme from './themes/milky-way-color-theme.json';
 import { useState } from 'react';
 
 type ThemeColor = {
@@ -59,7 +59,7 @@ const ThemeColorScreenshot: React.FC = () => {
     { text: ';', scope: 'punctuation' },
     { text: '\n\n', scope: 'plain' },
     {
-      text: '// ✨ Via Lactea: A galactic coding experience',
+      text: '// ✨ Milky Way: A galactic coding experience',
       scope: 'comment',
     },
     { text: '\n', scope: 'plain' },
@@ -112,7 +112,7 @@ const ThemeColorScreenshot: React.FC = () => {
     { text: '      <', scope: 'punctuation' },
     { text: 'h1', scope: 'entity.name.tag' },
     { text: '>', scope: 'punctuation' },
-    { text: 'Via Lactea', scope: 'plain' },
+    { text: 'Milky Way', scope: 'plain' },
     { text: '</', scope: 'punctuation' },
     { text: 'h1', scope: 'entity.name.tag' },
     { text: '>\n', scope: 'punctuation' },
@@ -200,7 +200,7 @@ const ThemeColorScreenshot: React.FC = () => {
               letterSpacing: '0.02em',
             }}
           >
-            Preview.tsx — Via Lactea
+            Preview.tsx — Milky Way
           </div>
           <div style={{ width: 60 }} />
         </div>

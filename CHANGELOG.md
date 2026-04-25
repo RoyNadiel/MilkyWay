@@ -1,6 +1,16 @@
 # Change Log
 
-All notable changes to the "via-lactea-theme" extension will be documented in this file.
+## [0.0.2]
+
+### Added
+
+- Screenshot generation script
+- README with installation instructions
+- CHANGELOG.md
+- Dependencies for screenshot generation
 
 ## [0.0.1]
-- Initial release of Via Lactea Dark Theme
+
+### Added
+
+- Initial release of Milky Way Dark Theme
