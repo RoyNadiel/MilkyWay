@@ -1,11 +1,12 @@
 // Theme preview component for screenshots
 // Requires a TypeScript config with `resolveJsonModule: true` and `allowSyntheticDefaultImports: true`
-import React from "react";
-import theme from "./themes/via-lactea-color-theme.json";
+import React from 'react';
+import theme from './themes/via-lactea-color-theme.json';
+import { useState } from 'react';
 
 type ThemeColor = {
-  name: string;
-  scope?: string | string[];
+  name?: string;
+  scope: string | string[];
   settings: {
     foreground?: string;
     background?: string;
@@ -20,355 +21,268 @@ type ThemeJson = {
   tokenColors: ThemeColor[];
 };
 
-const editorColorKeys = [
-  "editor.background",
-  "editor.foreground",
-  "editor.lineHighlightBackground",
-  "input.background",
-  "input.foreground",
-  "focusBorder",
-  "input.focusBorder",
-  "activityBar.background",
-  "sideBar.background",
-  "statusBar.background",
-];
-
-const tokenSamples = [
-  { text: "const ", scope: "keyword" },
-  { text: "theme", scope: "variable" },
-  { text: " = ", scope: "operator" },
-  { text: "{", scope: "punctuation" },
-  { text: '"name"', scope: "constant.other.key" },
-  { text: ": ", scope: "punctuation" },
-  { text: '"Via Lactea"', scope: "string" },
-  { text: " }", scope: "punctuation" },
-];
-
-const findTokenStyle = (scope: string): React.CSSProperties => {
-  const entry = (theme as ThemeJson).tokenColors.find((token) => {
-    if (Array.isArray(token.scope)) {
-      return token.scope.includes(scope);
-    }
-    return token.scope === scope;
-  });
-
-  if (!entry) {
-    return {};
-  }
-
-  return {
-    color: entry.settings.foreground,
-    fontStyle: entry.settings.fontStyle?.includes("italic")
-      ? "italic"
-      : "normal",
-    fontWeight: entry.settings.fontStyle?.includes("bold") ? "bold" : "normal",
-  };
-};
-
 const ThemeColorScreenshot: React.FC = () => {
-  const colors = (theme as ThemeJson).colors;
+  const t = theme as ThemeJson;
+  const colors = t.colors;
+  const [copiedScope, setCopiedScope] = useState<string | null>(null);
+
+  const getStyle = (scope: string): React.CSSProperties => {
+    const token = t.tokenColors.find((tc) => {
+      if (Array.isArray(tc.scope)) {
+        return tc.scope.includes(scope);
+      }
+      return tc.scope === scope;
+    });
+    return {
+      color:
+        token?.settings.foreground || colors['editor.foreground'] || '#ffffff',
+      fontStyle: token?.settings.fontStyle?.includes('italic')
+        ? 'italic'
+        : 'normal',
+      fontWeight: token?.settings.fontStyle?.includes('bold')
+        ? 'bold'
+        : 'normal',
+    };
+  };
+
+  // Sample code structure for a comprehensive preview
+  const code = [
+    { text: 'import', scope: 'keyword.control' },
+    { text: ' ', scope: 'plain' },
+    { text: 'React', scope: 'variable' },
+    { text: ', { ', scope: 'punctuation' },
+    { text: 'useState', scope: 'variable' },
+    { text: ' } ', scope: 'punctuation' },
+    { text: 'from', scope: 'keyword.control' },
+    { text: ' ', scope: 'plain' },
+    { text: "'react'", scope: 'string' },
+    { text: ';', scope: 'punctuation' },
+    { text: '\n\n', scope: 'plain' },
+    {
+      text: '// ✨ Via Lactea: A galactic coding experience',
+      scope: 'comment',
+    },
+    { text: '\n', scope: 'plain' },
+    { text: 'const', scope: 'storage.type' },
+    { text: ' ', scope: 'plain' },
+    { text: 'Galaxy', scope: 'entity.name.function' },
+    { text: ' = ', scope: 'keyword.operator' },
+    { text: '(', scope: 'punctuation' },
+    { text: 'stars', scope: 'variable.parameter' },
+    { text: ':', scope: 'punctuation' },
+    { text: ' number', scope: 'support.type.primitive' },
+    { text: ')', scope: 'punctuation' },
+    { text: ' => ', scope: 'keyword.control' },
+    { text: '{\n', scope: 'punctuation' },
+    { text: '  const', scope: 'storage.type' },
+    { text: ' [', scope: 'punctuation' },
+    { text: 'isVisible', scope: 'variable' },
+    { text: ', ', scope: 'punctuation' },
+    { text: 'setVisible', scope: 'variable' },
+    { text: '] = ', scope: 'keyword.operator' },
+    { text: 'useState', scope: 'variable' },
+    { text: '(', scope: 'punctuation' },
+    { text: 'true', scope: 'constant.language.boolean' },
+    { text: ')', scope: 'punctuation' },
+    { text: ';\n\n', scope: 'punctuation' },
+    { text: '  if', scope: 'keyword.control' },
+    { text: ' (', scope: 'punctuation' },
+    { text: 'stars', scope: 'variable' },
+    { text: ' > ', scope: 'keyword.operator' },
+    { text: '1000', scope: 'constant.numeric' },
+    { text: ') ', scope: 'punctuation' },
+    { text: '{\n', scope: 'punctuation' },
+    { text: '    console', scope: 'variable' },
+    { text: '.', scope: 'punctuation' },
+    { text: 'log', scope: 'support.function' },
+    { text: '(', scope: 'punctuation' },
+    { text: '"Infinite stars"', scope: 'string' },
+    { text: ')', scope: 'punctuation' },
+    { text: ';', scope: 'punctuation' },
+    { text: '\n  }\n\n', scope: 'punctuation' },
+    { text: '  return', scope: 'keyword.control' },
+    { text: ' (\n', scope: 'punctuation' },
+    { text: '    <', scope: 'punctuation' },
+    { text: 'div', scope: 'entity.name.tag' },
+    { text: ' ', scope: 'plain' },
+    { text: 'className', scope: 'entity.other.attribute-name' },
+    { text: '=', scope: 'keyword.operator' },
+    { text: '"nebula-container"', scope: 'string' },
+    { text: '>\n', scope: 'punctuation' },
+    { text: '      <', scope: 'punctuation' },
+    { text: 'h1', scope: 'entity.name.tag' },
+    { text: '>', scope: 'punctuation' },
+    { text: 'Via Lactea', scope: 'plain' },
+    { text: '</', scope: 'punctuation' },
+    { text: 'h1', scope: 'entity.name.tag' },
+    { text: '>\n', scope: 'punctuation' },
+    { text: '    </', scope: 'punctuation' },
+    { text: 'div', scope: 'entity.name.tag' },
+    { text: '>\n', scope: 'punctuation' },
+    { text: '  )', scope: 'punctuation' },
+    { text: ';', scope: 'punctuation' },
+    { text: '\n', scope: 'plain' },
+    { text: '}', scope: 'punctuation' },
+    { text: ';', scope: 'punctuation' },
+  ];
 
   return (
     <div
       style={{
-        fontFamily: "Inter, system-ui, sans-serif",
-        background: "#10131d",
-        minHeight: "100vh",
-        padding: 24,
-        color: "#f5f7ff",
+        width: '100vw',
+        height: '100vh',
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center',
+        background: 'linear-gradient(135deg, #020617 0%, #1e1b4b 100%)',
+        fontFamily: 'Inter, system-ui, sans-serif',
       }}
     >
       <div
-        style={{ maxWidth: 1100, margin: "0 auto", display: "grid", gap: 24 }}
+        style={{
+          width: '100%',
+          maxWidth: 960,
+          background: colors['editor.background'] || '#1a1b26',
+          borderRadius: 16,
+          boxShadow:
+            '0 50px 100px -20px rgba(0,0,0,0.6), 0 30px 60px -30px rgba(0,0,0,0.7), inset 0 0 0 1px rgba(255,255,255,0.1)',
+          overflow: 'hidden',
+          display: 'flex',
+          flexDirection: 'column',
+          transform: 'scale(1.05)',
+        }}
       >
-        <header
+        {/* Title Bar */}
+        <div
           style={{
-            display: "flex",
-            justifyContent: "space-between",
-            alignItems: "center",
+            background: colors['titleBar.activeBackground'] || '#131520',
+            padding: '14px 24px',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'space-between',
+            borderBottom: `1px solid ${colors['sideBar.border'] || '#323a63'}`,
           }}
         >
-          <div>
-            <h1 style={{ margin: 0, fontSize: 24 }}>
-              Via Lactea Editor Preview
-            </h1>
-            <p style={{ margin: "8px 0 0", color: "#d0d4e0cc" }}>
-              Captura los colores de editor definidos en el theme JSON.
-            </p>
-          </div>
-          <div style={{ display: "inline-flex", gap: 8, alignItems: "center" }}>
-            <span
+          <div style={{ display: 'flex', gap: 10 }}>
+            <div
               style={{
-                background: "#222532",
-                color: "#d0d4e0",
-                borderRadius: 999,
-                padding: "6px 12px",
-                fontSize: 12,
+                width: 13,
+                height: 13,
+                borderRadius: '50%',
+                background: '#ff5f56',
+                boxShadow: 'inset 0 0 2px rgba(0,0,0,0.2)',
               }}
-            >
-              Dark theme
-            </span>
-            <span
+            />
+            <div
               style={{
-                background: "#2a2f45",
-                color: "#a0c8ff",
-                borderRadius: 999,
-                padding: "6px 12px",
-                fontSize: 12,
+                width: 13,
+                height: 13,
+                borderRadius: '50%',
+                background: '#ffbd2e',
+                boxShadow: 'inset 0 0 2px rgba(0,0,0,0.2)',
               }}
-            >
-              VS Code style
-            </span>
+            />
+            <div
+              style={{
+                width: 13,
+                height: 13,
+                borderRadius: '50%',
+                background: '#27c93f',
+                boxShadow: 'inset 0 0 2px rgba(0,0,0,0.2)',
+              }}
+            />
           </div>
-        </header>
-
-        <section
-          style={{ display: "grid", gridTemplateColumns: "320px 1fr", gap: 20 }}
-        >
-          <aside
+          <div
             style={{
-              borderRadius: 16,
-              overflow: "hidden",
-              border: `1px solid ${colors["focusBorder"] || "#69D2F8"}`,
-              background: colors["sideBar.background"] || "#171a27",
+              color: colors['sideBarTitle.foreground'] || '#888',
+              fontSize: 13,
+              fontWeight: 500,
+              letterSpacing: '0.02em',
             }}
           >
-            <div
-              style={{
-                padding: "16px 18px",
-                borderBottom: `1px solid ${colors["focusBorder"] || "#69D2F8"}`,
-                background: "#1c2032",
-              }}
-            >
-              <strong style={{ color: "#e8f2ff" }}>Explorador</strong>
-            </div>
-            <div
-              style={{
-                padding: 18,
-                display: "grid",
-                gap: 12,
-                color: colors["sideBar.foreground"] || "#cccccc",
-              }}
-            >
-              <div
-                style={{
-                  background: "#22273d",
-                  borderRadius: 10,
-                  padding: "12px 14px",
-                }}
-              >
-                src
-              </div>
-              <div
-                style={{
-                  background: "#22273d",
-                  borderRadius: 10,
-                  padding: "12px 14px",
-                }}
-              >
-                themes
-              </div>
-              <div
-                style={{
-                  background: "#22273d",
-                  borderRadius: 10,
-                  padding: "12px 14px",
-                }}
-              >
-                README.md
-              </div>
-            </div>
-          </aside>
-
-          <div style={{ display: "grid", gap: 18 }}>
-            <div
-              style={{
-                borderRadius: 18,
-                overflow: "hidden",
-                border: `1px solid ${colors["focusBorder"] || "#69D2F8"}`,
-              }}
-            >
-              <div
-                style={{
-                  background: colors["activityBar.background"] || "#171a27",
-                  padding: "14px 18px",
-                  display: "flex",
-                  alignItems: "center",
-                  gap: 12,
-                }}
-              >
-                <span
-                  style={{
-                    width: 12,
-                    height: 12,
-                    borderRadius: "50%",
-                    background: "#ff5f56",
-                    display: "inline-block",
-                  }}
-                />
-                <span
-                  style={{
-                    width: 12,
-                    height: 12,
-                    borderRadius: "50%",
-                    background: "#ffbd2e",
-                    display: "inline-block",
-                  }}
-                />
-                <span
-                  style={{
-                    width: 12,
-                    height: 12,
-                    borderRadius: "50%",
-                    background: "#27c93f",
-                    display: "inline-block",
-                  }}
-                />
-                <span
-                  style={{
-                    color: colors["editor.foreground"] || "#ebebeb",
-                    marginLeft: 12,
-                    fontWeight: 600,
-                  }}
-                >
-                  via-lactea-color-theme.json
-                </span>
-              </div>
-              <div
-                style={{
-                  background: colors["editor.background"] || "#1a1b26",
-                  color: colors["editor.foreground"] || "#ebebeb",
-                  padding: 24,
-                  minHeight: 320,
-                  position: "relative",
-                }}
-              >
-                <div
-                  style={{
-                    position: "absolute",
-                    inset: 0,
-                    backgroundColor:
-                      colors["editor.lineHighlightBackground"] || "#272a33ff",
-                    opacity: 0.08,
-                    pointerEvents: "none",
-                  }}
-                />
-                <pre
-                  style={{
-                    position: "relative",
-                    margin: 0,
-                    fontFamily: "JetBrains Mono, monospace",
-                    fontSize: 14,
-                    lineHeight: 1.6,
-                    zIndex: 1,
-                  }}
-                >
-                  {tokenSamples.map((token, index) => (
-                    <span
-                      key={index}
-                      style={findTokenStyle(token.scope || "text")}
-                    >
-                      {token.text}
-                    </span>
-                  ))}
-                </pre>
-                <div
-                  style={{
-                    marginTop: 24,
-                    display: "inline-flex",
-                    gap: 8,
-                    alignItems: "center",
-                    flexWrap: "wrap",
-                    color: "#b7c1ffdd",
-                  }}
-                >
-                  <span
-                    style={{
-                      background: "#2a3051",
-                      borderRadius: 8,
-                      padding: "8px 12px",
-                    }}
-                  >
-                    Editor preview
-                  </span>
-                  <span
-                    style={{
-                      background: "#2a3051",
-                      borderRadius: 8,
-                      padding: "8px 12px",
-                    }}
-                  >
-                    Token color simulation
-                  </span>
-                  <span
-                    style={{
-                      background: "#2a3051",
-                      borderRadius: 8,
-                      padding: "8px 12px",
-                    }}
-                  >
-                    Focus border visible
-                  </span>
-                </div>
-              </div>
-            </div>
-
-            <div
-              style={{
-                display: "grid",
-                gap: 16,
-                borderRadius: 16,
-                border: `1px solid ${colors["focusBorder"] || "#69D2F8"}`,
-                padding: 18,
-                background: "#171a2b",
-              }}
-            >
-              <h2 style={{ margin: 0, fontSize: 18, color: "#eef4ff" }}>
-                Colores del editor
-              </h2>
-              <div
-                style={{
-                  display: "grid",
-                  gridTemplateColumns: "repeat(auto-fit, minmax(150px, 1fr))",
-                  gap: 12,
-                }}
-              >
-                {editorColorKeys.map((key) => (
-                  <div
-                    key={key}
-                    style={{
-                      display: "grid",
-                      gap: 8,
-                      padding: 12,
-                      borderRadius: 12,
-                      background: "#1b1f2f",
-                      border: `1px solid ${colors["focusBorder"] || "#69D2F8"}`,
-                    }}
-                  >
-                    <div
-                      style={{ display: "flex", alignItems: "center", gap: 8 }}
-                    >
-                      <span
-                        style={{
-                          width: 16,
-                          height: 16,
-                          borderRadius: 4,
-                          background: colors[key] || "#000",
-                        }}
-                      />
-                      <strong style={{ fontSize: 13, color: "#e7ecff" }}>
-                        {key}
-                      </strong>
-                    </div>
-                    <div style={{ fontSize: 13, color: "#a1a9c6" }}>
-                      {colors[key] || "not defined"}
-                    </div>
-                  </div>
-                ))}
-              </div>
-            </div>
+            Preview.tsx — Via Lactea
           </div>
-        </section>
+          <div style={{ width: 60 }} />
+        </div>
+
+        {/* Editor Body */}
+        <div style={{ display: 'flex', flex: 1 }}>
+          {/* Code Area */}
+          <div
+            style={{
+              flex: 1,
+              padding: '40px 48px',
+              position: 'relative',
+              background: colors['editor.background'],
+            }}
+          >
+            <pre
+              style={{
+                margin: 0,
+                fontFamily: '"JetBrains Mono", "Fira Code", monospace',
+                fontSize: 17,
+                lineHeight: 1.7,
+                color: colors['editor.foreground'] || '#ebebeb',
+                letterSpacing: '-0.01em',
+              }}
+            >
+              {code.map((token, i) => (
+                <span key={i} style={getStyle(token.scope)}>
+                  {token.text}
+                </span>
+              ))}
+            </pre>
+
+            {/* Line Highlight Simulation */}
+            <div
+              style={{
+                position: 'absolute',
+                top: 40 + 1.7 * 17 * 15.5, // Highlight line 16 (return)
+                left: 0,
+                right: 0,
+                height: 1.7 * 17,
+                background:
+                  colors['editor.lineHighlightBackground'] || '#272a33ff',
+                opacity: 0.4,
+                pointerEvents: 'none',
+              }}
+            />
+          </div>
+        </div>
+
+        {/* Status Bar */}
+        <div
+          style={{
+            background: colors['statusBar.background'] || '#131520',
+            color: colors['statusBar.foreground'] || '#d3d3d3',
+            padding: '6px 20px',
+            fontSize: 12,
+            display: 'flex',
+            justifyContent: 'space-between',
+            alignItems: 'center',
+            borderTop: `1px solid ${colors['sideBar.border'] || '#323a63'}`,
+          }}
+        >
+          <div style={{ display: 'flex', gap: 16 }}>
+            <span style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
+              <div
+                style={{
+                  width: 8,
+                  height: 8,
+                  borderRadius: '50%',
+                  background: '#03b2f1',
+                }}
+              />
+              Main
+            </span>
+            <span style={{ opacity: 0.8 }}>0 Δ 0 ⊗</span>
+          </div>
+          <div style={{ display: 'flex', gap: 20, opacity: 0.8 }}>
+            <span>Spaces: 2</span>
+            <span>UTF-8</span>
+            <span>TypeScript JSX</span>
+          </div>
+        </div>
       </div>
     </div>
   );

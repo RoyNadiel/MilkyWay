@@ -12,4 +12,4 @@ A beautiful dark theme inspired by the Milky Way, originally created for Monaco 
 
 ## Preview
 
-![Preview](./screenshot.png)
+![Preview](./preview.png)
