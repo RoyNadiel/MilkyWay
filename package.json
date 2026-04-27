@@ -1,9 +1,9 @@
 {
-  "name": "milky-way",
-  "displayName": "Milky Way",
-  "description": "A premium dark theme inspired by the cosmic beauty of the Milky Way",
-  "version": "0.0.1",
-  "publisher": "RoyNadiel",
+  "name": "milky-way-theme",
+  "displayName": "Milky Way Theme",
+  "description": "A dark theme inspired by the cosmic beauty of the Milky Way",
+  "version": "0.0.2",
+  "publisher": "roy-nadiel",
   "icon": "icon.png",
   "engines": {
     "vscode": "^1.80.0"
@@ -27,7 +27,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/RoyNadiel/Milky-Way"
+    "url": "https://github.com/RoyNadiel/MilkyWay"
   },
   "dependencies": {
     "@types/react": "^19.2.14",
